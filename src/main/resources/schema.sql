@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS PETITION;
+CREATE TABLE PETITION (
+id INT AUTO_INCREMENT  PRIMARY KEY,
+title VARCHAR(100) NOT NULL,
+description VARCHAR(1000) NOT NULL,
+sector_id INT,
+user_id INT,
+number_of_signatures INT
+);
