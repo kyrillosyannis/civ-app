@@ -4,7 +4,6 @@ import com.civiliansconnection.capp.domain.User;
 import com.civiliansconnection.capp.repository.UserRepository;
 
 import com.civiliansconnection.capp.security.CivUserDetails;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,10 @@ public class CivUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CivUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found" + username));
-        UserDetails userDetails = new CivUserDetails(user);
+        CivUserDetails userDetails = new CivUserDetails(user);
         return userDetails;
     }
 }

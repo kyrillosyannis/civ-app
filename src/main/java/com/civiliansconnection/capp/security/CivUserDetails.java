@@ -1,25 +1,40 @@
 package com.civiliansconnection.capp.security;
 
 import com.civiliansconnection.capp.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class CivUserDetails implements UserDetails {
 
     private String username;
+    @JsonIgnore
     private String password;
+    @Getter
+    private Long id;
+    @JsonIgnore
     private List<GrantedAuthority> authorities;
+    @JsonIgnore
     private boolean accountNonExpired;
+    @JsonIgnore
     private boolean accountNonLocked;
+    @JsonIgnore
     private boolean credentialsNonExpired;
-    private boolean isEnabled;
+    @JsonIgnore
+    private boolean enabled;
 
     public CivUserDetails(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.id = user.getId();
 //        this.accountNonExpired = user.getAccountNonExpired() == 1;
 //        this.accountNonLocked = user.getAccountNonLocked() == 1;
 //        this.credentialsNonExpired = user.getCredentialsNonExpired() == 1;
@@ -34,7 +49,7 @@ public class CivUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return this.password;
     }
 
     @Override

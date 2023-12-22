@@ -5,6 +5,7 @@ import com.civiliansconnection.capp.dto.UserDto;
 import com.civiliansconnection.capp.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,10 +16,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ConversionService conversionService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, ConversionService conversionService) {
+    public UserService(UserRepository userRepository, ConversionService conversionService,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.conversionService = conversionService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserDto findByUsername(String username) {
@@ -29,7 +33,9 @@ public class UserService {
     }
 
     public UserDto create(UserDto userDto) {
-        log.info("Creating user:", userDto.getUsername());
+        log.info("Creating user: {}", userDto.getUsername());
+        String hashedPass = passwordEncoder.encode(userDto.getPassword());
+        userDto.setPassword(hashedPass);
         User user = conversionService.convert(userDto, User.class);
         userRepository.save(user);
         userDto = conversionService.convert(user, UserDto.class);

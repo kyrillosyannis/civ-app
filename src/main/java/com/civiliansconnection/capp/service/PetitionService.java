@@ -2,12 +2,17 @@ package com.civiliansconnection.capp.service;
 
 import com.civiliansconnection.capp.domain.Petition;
 import com.civiliansconnection.capp.dto.PetitionDto;
+import com.civiliansconnection.capp.exception.CivException;
 import com.civiliansconnection.capp.repository.PetitionRepository;
+import com.civiliansconnection.capp.security.CivUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +46,6 @@ public class PetitionService {
         List<PetitionDto> petitionDtoList = petitionPage
                 .map(petition -> conversionService.convert(petition, PetitionDto.class))
                 .toList();
-        System.out.println(petitionDtoList);
         return new PageImpl<>(petitionDtoList, pageable, petitionPage.getTotalElements());
     }
 
@@ -51,10 +55,15 @@ public class PetitionService {
     }
 
     public PetitionDto addSignature(Long id) {
+        CivUserDetails principal = (CivUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("Adding signature for petition: {}", id);
-        petitionRepository.addSignature(id);
         Petition petition = petitionRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Petition does not exist with id" + id));
+        if (principal.getId().equals(petition.getUserId())) {
+            throw new CivException("User cannot vote for their own petition");
+        }
+        petition.setNumberOfSignatures(petition.getNumberOfSignatures() + 1);
+        petition = petitionRepository.save(petition);
         PetitionDto petitionDto = conversionService.convert(petition, PetitionDto.class);
         return petitionDto;
     }
