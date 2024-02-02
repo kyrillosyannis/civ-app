@@ -1,18 +1,18 @@
 DROP TABLE IF EXISTS PETITIONS;
-CREATE TABLE PETITIONS (
-id INT AUTO_INCREMENT  PRIMARY KEY,
-title VARCHAR(100) NOT NULL,
-description VARCHAR(1000) NOT NULL,
-sector_id INT,
-user_id INT,
-number_of_signatures INT
+CREATE TABLE petitions (
+id serial  primary key,
+title varchar(100) not null,
+description varchar(1000) not null,
+sector_id int,
+user_id int,
+number_of_signatures int
 );
 
 create table users (
-id int auto_increment primary key,
+id serial primary key,
 username varchar(100) not null,
-password varchar(100) not null,
+password varchar(100) not null
 );
 
-CREATE INDEX idx_users_username
-ON users(username);
+create index idx_users_username
+on users(username);

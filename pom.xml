@@ -9,12 +9,12 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.civilians-connection</groupId>
-	<artifactId>c-app</artifactId>
+	<artifactId>civ-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>c-app</name>
+	<name>civ-app</name>
 	<description>Civilians connection app</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -71,9 +71,9 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-					<jvmArguments>
-						-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
-					</jvmArguments>
+<!--					<jvmArguments>-->
+<!--						-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005-->
+<!--					</jvmArguments>-->
 				</configuration>
 			</plugin>
 		</plugins>
